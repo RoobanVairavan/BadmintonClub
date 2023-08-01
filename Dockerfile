@@ -1,9 +1,14 @@
-FROM maven:3.8.5-openjdk-17 AS build
-COPY . .
-RUN mvn clean package -Dmaven.test.skip=true
+# Use a base image that supports Java, such as AdoptOpenJDK
+FROM adoptopenjdk:17-jre-hotspot
 
-FROM openjdk:17-ea-18-jdk-slim
-ARG JAR_FILE=target/BadmintonClub-0.0.1-SNAPSHOT.war
-COPY --from=build ${JAR_FILE} app.war
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the packaged WAR file into the container
+COPY target/BadmintonClub-0.0.1-SNAPSHOT.war /app/app.war
+
+# Make port 8080 available to the world outside the container
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.war"]
+
+# Run the application with Java
+CMD ["java", "-jar", "app.war"]/app.war"]
