@@ -32,4 +32,4 @@ COPY --from=build /app/target/*.war ./BadmintonClub.war
 EXPOSE 8888
 
 # Start Tomcat when the Docker container starts
-CMD ["java", "-jar","catalina.sh", "run","BadmintonClub.war"]
+CMD ["catalina.sh", "run","BadmintonClub.war"]
