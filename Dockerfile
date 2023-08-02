@@ -20,13 +20,16 @@ RUN mvn package -DskipTests
 FROM tomcat:9-jdk17-openjdk-slim
 
 # Remove the default ROOT webapp
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
+RUN rm -rf /usr/local/tomcat/webapps/BadmintonClub
 
 # Set the working directory
 WORKDIR /usr/local/tomcat/webapps
 
 # Copy the war file from the build stage to the Tomcat webapps directory with ROOT as context path
-COPY --from=build /app/target/*.war ./ROOT.war
+COPY --from=build /app/target/*.war ./BadmintonClub.war
+
+# Expose port 8080 (default port for Spring Boot)
+EXPOSE 8888
 
 # Start Tomcat when the Docker container starts
-CMD ["catalina.sh", "run"]
+CMD ["java", "-jar","catalina.sh", "run","BadmintonClub.war"]
