@@ -19,11 +19,14 @@ RUN mvn package -DskipTests
 # Use a base image for the application runtime (replace the version with your preferred one)
 FROM tomcat:9-jdk17-openjdk-slim
 
+# Remove the default ROOT webapp
+RUN rm -rf /usr/local/tomcat/webapps/ROOT
+
 # Set the working directory
 WORKDIR /usr/local/tomcat/webapps
 
-# Copy the war file from the build stage to the Tomcat webapps directory
-COPY --from=build /app/target/*.war ./app.war
+# Copy the war file from the build stage to the Tomcat webapps directory with ROOT as context path
+COPY --from=build /app/target/*.war ./ROOT.war
 
 # Start Tomcat when the Docker container starts
 CMD ["catalina.sh", "run"]
